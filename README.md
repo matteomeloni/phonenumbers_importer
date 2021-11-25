@@ -12,6 +12,8 @@ put your db settings into .env
 
 `php artisan key:generate`
 
+php artisan migrate`
+
 ## Upload csv data.
 
 ---
