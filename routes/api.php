@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('phone-numbers', [\App\Http\Controllers\PhoneNumberController::class, 'index'])->name('phone-numbers.index');
+Route::get('phone-numbers/statistics', [\App\Http\Controllers\PhoneNumberController::class, 'statistics'])->name('phone-numbers.statistics');
+Route::get('phone-numbers/test/{phone}', [\App\Http\Controllers\PhoneNumberController::class, 'testNumber'])->name('phone-numbers.test-number');
