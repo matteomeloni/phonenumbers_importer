@@ -22,6 +22,10 @@ In this version the file is loaded from a static path (./storage/app/South_Afric
 
 Run this artisan command `artisan phone-numbers:import`
 
+
+
+This command use a LaravelExcel Import class, see [documentation](https://docs.laravel-excel.com/3.1/getting-started)
+
 ## API
 
 For serve the application on the PHP development server, run this command `artisan serve` 
