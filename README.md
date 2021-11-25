@@ -1,66 +1,104 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Documentation
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Installation
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+`composer install`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+`cp .env.example .env`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+put your db settings into .env
 
-## Learning Laravel
+`php artisan key:generate`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Upload csv data.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+In this version the file is loaded from a static path (./storage/app/South_African_Mobile_Numbers.csv).
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-- **[Romega Software](https://romegasoftware.com)**
+Run this artisan command `artisan phone-numbers:import`
 
-## Contributing
+## API
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+For serve the application on the PHP development server, run this command `artisan serve` 
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Get all imported numbers
 
-## Security Vulnerabilities
+#### Request
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+`[GET] http://127.0.0.1:8000/api/phone-numbers`
 
-## License
+#### Response
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```json
+[
+    {
+        "id": 1,
+        "mobile": "6478342944",
+        "status": "REJECTED",
+        "status_description": null,
+        "created_at": "2021-11-25T18:30:06.000000Z",
+        "updated_at": "2021-11-25T18:30:06.000000Z"
+    },
+    {
+        "id": 2,
+        "mobile": "27718159078",
+        "status": "IMPORTED",
+        "status_description": null,
+        "created_at": "2021-11-25T18:30:06.000000Z",
+        "updated_at": "2021-11-25T18:30:06.000000Z"
+    },
+    {
+        "id": 3,
+        "mobile": "27730276061",
+        "status": "CORRECTED_AND_IMPORTED",
+        "status_description": "ADDED INTERNATIONAL PREFIX",
+        "created_at": "2021-11-25T18:30:06.000000Z",
+        "updated_at": "2021-11-25T18:30:06.000000Z"
+    },
+    ...
+]
+```
+
+#### To filter the results use
+
+You can filter based on these states: `imported` and `rejected`
+
+`GET http://127.0.0.1:8000/api/people?filter={filter}`
+
+## Get statistics
+
+#### Request
+
+`[GET] http://127.0.0.1:8000/api/phone-numbers/statistics`
+
+#### Response
+
+```json
+{
+    "imported": 1,
+    "corrected": 1,
+    "rejected": 1
+}
+```
+
+## Test phone number
+
+#### Request
+
+`[GET] http://127.0.0.1:8000/api/phone-numbers/test{phone}`
+
+#### Response
+
+```json
+{
+    "phone": "INSERTED PHONE",
+    "status": "[Phone Number is valid | Phone Number is invalid | The international prefix is missing, try with 27..."
+}
+```
